@@ -186,8 +186,8 @@ void calculateSentiment(const vector<vector<string>>& tweets, const vector<strin
             }
         }
 
-        double posPct = (totalWords > 0) ? (double)posCount / totalWords * 100.0 : 0.0;
-        double negPct = (totalWords > 0) ? (double)negCount / totalWords * 100.0 : 0.0;
+        double posPct = (totalWords > 0) ? static_cast<double>(posCount) / totalWords * 100.0 : 0.0;
+        double negPct = (totalWords > 0) ? static_cast<double>(negCount) / totalWords * 100.0 : 0.0;
 
         cout << left << setw(20) << senator << right << setw(15) << fixed << setprecision(5) << posPct << setw(15) << negPct << endl;
     }
@@ -218,7 +218,7 @@ void findMostTalkative(const vector<vector<string>>& tweets, const vector<string
             }
         }
 
-        double avgWords = (tweetCount > 0) ? (double)totalWords / tweetCount : 0.0;
+        double avgWords = (tweetCount > 0) ? static_cast<double>(totalWords) / tweetCount : 0.0;
 
         cout << left << setw(20) << senator << right << setw(15) << tweetCount << setw(20) << fixed << setprecision(2) << avgWords << endl;
 
@@ -282,8 +282,8 @@ void analyzeBidenSentiment(const vector<vector<string>>& tweets, const vector<st
 
     cout << "Found " << bidenTweetCount << " tweets mentioning Biden." << endl;
     if (totalWords > 0) {
-        double posPct = (double)posCount / totalWords * 100.0;
-        double negPct = (double)negCount / totalWords * 100.0;
+        double posPct = static_cast<double>(posCount) / totalWords * 100.0;
+        double negPct = static_cast<double>(negCount) / totalWords * 100.0;
         cout << "Positive %: " << posPct << endl;
         cout << "Negative %: " << negPct << endl;
         
@@ -464,13 +464,13 @@ void analyzePoliticalAlignment(const vector<vector<string>>& tweets, const vecto
                 // Check negation (window +/- 2)
                 bool negated = false;
                 // int is a type cast to avoid signed/unsigned comparison warnings
-                int start = (int)i - 2;
-                int end = (int)i + 2;
+                int start = static_cast<int>(i) - 2;
+                int end = static_cast<int>(i) + 2;
                 if (start < 0) start = 0;
-                if (end >= (int)tweetWords.size()) end = (int)tweetWords.size() - 1;
+                if (end >= static_cast<int>(tweetWords.size())) end = static_cast<int>(tweetWords.size()) - 1;
 
                 for (int j = start; j <= end; ++j) {
-                    if (j == (int)i) continue;
+                    if (j == static_cast<int>(i)) continue;
                     if (tweetWords[j] == "not" || tweetWords[j] == "no" || tweetWords[j] == "never") {
                         negated = true;
                     }
@@ -506,12 +506,12 @@ void analyzePoliticalAlignment(const vector<vector<string>>& tweets, const vecto
     cout << string(50, '-') << endl;
     
     for(size_t s=0; s<senators.size(); ++s) {
-        double acc = (senTotal[s] > 0) ? (double)senCorrect[s] / senTotal[s] * 100.0 : 0.0;
+        double acc = (senTotal[s] > 0) ? static_cast<double>(senCorrect[s]) / senTotal[s] * 100.0 : 0.0;
         cout << left << setw(20) << senators[s] << setw(15) << getParty(senators[s]) << fixed << setprecision(1) << acc << "% (" << senCorrect[s] << "/" << senTotal[s] << ")" << endl;
     }
     cout << endl;
     
-    cout << "Overall Accuracy: " << (totalPredictions > 0 ? (double)correctPredictions / totalPredictions * 100.0 : 0.0) << "%" << endl;
+    cout << "Overall Accuracy: " << (totalPredictions > 0 ? static_cast<double>(correctPredictions) / totalPredictions * 100.0 : 0.0) << "%" << endl;
 }
 
 /*
@@ -519,11 +519,11 @@ void analyzePoliticalAlignment(const vector<vector<string>>& tweets, const vecto
 *   This was part of a more detailed word-by-word analysis to infer political alignment. However, with a much larger dataset in mind, this approach 
 *   becomes less practical and more resource-intensive. 
 *
-*   Instead, we're now using a more streamlined approach. We filter out common stop words and focus on a predefined set of 
+*   Instead, I'm now using a more streamlined approach. I filter out common stop words and focus on a predefined set of 
 *   key political terms (like party names and political figures). This makes the alignment detection more efficient and scalable for a large volume of tweets.
 *
-*   As a result, we no longer need to write each word to a file for this analysis. The createPoliticalWordFile function is being commented out 
-*   to reflect this updated approach. We are now directly analyzing tweets using the key terms without generating an intermediate file.
+*   As a result, I no longer need to write each word to a file for this analysis. The createPoliticalWordFile function is being commented out 
+*   to reflect this updated approach. I am now directly analyzing tweets using the key terms without generating an intermediate file.
 *
 *
 void createPoliticalWordFile(const vector<vector<string>>& tweets) {
